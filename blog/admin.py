@@ -54,6 +54,10 @@ class GeneratorAdmin(DjangoObjectActions, admin.ModelAdmin):
             messages.warning(request, 'This prompt has already been used.')
             return
 
+        if obj.running:
+            messages.warning(request, 'This prompt is already running.')
+            return
+
         thread = Thread(target=thread_function, args=[obj], daemon=True)
         thread.start()
 
