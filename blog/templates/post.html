@@ -56,6 +56,7 @@
 
     #date {
         font-size: medium;
+        text-align: center;
     }
 
     p {
@@ -63,7 +64,16 @@
         text-align: justify;
     }
 
+    h1 {
+        text-align: center;
+    }
+
     h2 {
+        margin-top: 1em;
+        text-align: center;
+    }
+
+    hr {
         margin-top: 1em;
     }
 </style>
@@ -75,6 +85,7 @@
     <div id="inner-container">
         <h1 id="title-text"> {{ title }} </h1>
         <span id="date">{{ date }}</span>
+        <hr>
         {% for section in content %}
         <h2> {{ section|lookup:'sub-heading' }} </h2>
         {% for paragraph in section.text %}

@@ -3,7 +3,7 @@ from django.http import HttpResponse, HttpRequest
 from .models import Article, Message
 
 from datetime import datetime
-from json import loads
+from json import loads, dumps
 
 
 def index(req: HttpRequest):
@@ -16,23 +16,14 @@ def index(req: HttpRequest):
         'desc': loads(articles[0].body)[0]['text'][0],
         'slug': articles[0].slug
     }
-    data['secondary_stories'] = [
-        {
-            'title': article.title,
-            'date': article.date,
-            'slug': article.slug,
-            'previews': loads(article.body)[0]['text'][:2]
-        } for article in articles[1:4]
-    ]
 
-    data['columns'] = range(2)
     data['articles'] = [
         {
             'title': article.title,
             'date': article.date,
             'slug': article.slug,
-            'previews': loads(article.body)[0]['text'][:2]
-        } for article in articles[4:12]
+            'previews': [dumps(text) for text in loads(article.body)[0]['text'][:2]]
+        } for article in articles[1:12]
     ]
 
     message = Message.objects.first()
