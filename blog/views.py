@@ -7,7 +7,7 @@ from json import loads, dumps
 
 
 def index(req: HttpRequest):
-    articles = Article.objects.all().order_by('date')[:12]
+    articles = Article.objects.all().order_by('-date')[:12]
 
     data = {}
 

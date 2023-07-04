@@ -12,6 +12,9 @@ class Article(models.Model):
     def __str__(self):
         return self.title
 
+    def get_absolute_url(self):
+        return f'/post/{self.slug}'
+
 
 class Message(models.Model):
     text = models.TextField()
@@ -19,3 +22,14 @@ class Message(models.Model):
 
     def __str__(self) -> str:
         return str(self.date)
+
+
+class Generator(models.Model):
+    id = models.AutoField(primary_key=True)
+    content = models.TextField()
+    date = models.DateTimeField(auto_now_add=True)
+    used = models.BooleanField(default=False)
+    running = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.content[:100]

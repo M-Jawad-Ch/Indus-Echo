@@ -266,7 +266,12 @@ async def generate(content: str):
 
     slug = temp
 
-    article = await Article.objects.acreate(slug=slug)
+    try:
+        article = await Article.objects.acreate(slug=slug)
+    except Exception as e:
+        print(e)
+        return
+
     article.title = overview.get('title')
     article.body = json.dumps(content)
 

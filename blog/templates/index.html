@@ -262,24 +262,25 @@
         var articles = document.getElementsByClassName('preview-available')
         var previews = document.getElementsByClassName('article-preview')
 
+        for (let i = 0; i < articles.length; i++) {
+            var text = JSON.parse(previews[i].innerText.replace(/\n\t/, ''))
+
+            let res = ''
+            for (const p of text) {
+                res += '<p>'
+                for (const char of p) {
+                    res += '<span class="animated-words">' + char + '</span>'
+                } res += '</p>'
+            }
+
+            var prevtext = previews[i].innerText
+            text = res
+
+            previews[i].innerHTML = text
+        }
+
         while (true) {
             for (let i = 0; i < articles.length; i++) {
-
-                var text = JSON.parse(previews[i].innerText.replace(/\n\t/, ''))
-
-                let res = ''
-                for (const p of text) {
-                    res += '<p>'
-                    for (const char of p) {
-                        res += '<span class="animated-words">' + char + '</span>'
-                    } res += '</p>'
-                }
-
-                var prevtext = previews[i].innerText
-                text = res
-
-                previews[i].innerHTML = text
-
                 articles[i].classList.add('selected')
                 previews[i].classList.remove('hide-article-preview')
 
