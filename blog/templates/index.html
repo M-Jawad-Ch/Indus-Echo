@@ -2,6 +2,10 @@
 
 {% block title %} The Indus Echo | Home {% endblock %}
 
+{% block description %}
+The Indus Echo. We cover many aspects of the history, culture and the nature of the sub-continent.
+{% endblock %}
+
 {%block page-style%}
 <style>
     main {
@@ -281,6 +285,7 @@
 
         while (true) {
             for (let i = 0; i < articles.length; i++) {
+
                 articles[i].classList.add('selected')
                 previews[i].classList.remove('hide-article-preview')
 
@@ -293,13 +298,12 @@
 
                     let words = p.querySelectorAll('.animated-words')
 
-                    await await new Promise(r => setTimeout(r, 100));
                     cursor.classList.remove('blinking')
                     cursor.style.display = 'inline'
 
                     for (const word of words) {
                         word.classList.add('visible');
-                        await await new Promise(r => setTimeout(r, 25));
+                        await await new Promise(r => setTimeout(r, 10));
                     }
 
                     if (idx != paragraphs.length - 1)
@@ -309,15 +313,38 @@
                 var cursor = document.getElementById('cursor')
 
                 cursor.classList.add('blinking')
-                await await new Promise(r => setTimeout(r, 5000));
+                await await new Promise(r => setTimeout(r, 10000));
 
+                paragraphs = [...paragraphs]
+                paragraphs.reverse()
 
-                cursor.style.display = 'none'
+                cursor.remove()
 
-                await await new Promise(r => setTimeout(r, 1000));
+                for (const [idx, p] of paragraphs.entries()) {
+                    p.innerHTML += '<span id="cursor"> | </span>'
+
+                    var cursor = document.getElementById('cursor')
+
+                    let words = [...p.querySelectorAll('.animated-words')]
+                    words.reverse()
+
+                    cursor.classList.remove('blinking')
+                    cursor.style.display = 'inline'
+
+                    for (const word of words) {
+                        word.classList.remove('visible');
+                        await await new Promise(r => setTimeout(r, 10));
+                    }
+
+                    if (idx != paragraphs.length - 1)
+                        p.querySelector('#cursor').remove()
+                }
+
+                cursor.classList.add('blinking')
+                await await new Promise(r => setTimeout(r, 3000));
+                cursor.remove()
                 articles[i].classList.remove('selected')
                 previews[i].classList.add('hide-article-preview')
-                previews[i].innerHTML = prevtext
                 cursor.classList.remove('blinking')
             }
         }
