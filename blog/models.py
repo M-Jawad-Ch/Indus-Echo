@@ -9,10 +9,10 @@ class Article(models.Model):
     date = models.DateField(auto_now_add=True)
     body = models.TextField()
 
-    def save(self, force_insert=False, force_update=False):
+    """def save(self, force_insert=False, force_update=False):
         super().save(force_insert, force_update)
 
-        # PING GOOGLE
+        # PING GOOGLE"""
 
     def __str__(self):
         return self.title

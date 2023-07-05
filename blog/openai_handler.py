@@ -253,29 +253,26 @@ async def generate_article(overview):
 
 
 async def generate(content: str):
-    try:
-        overview = json.loads(completion_to_content(await generate_article_overview(content)))
-        content = await generate_article(overview)
-
-        slug: str = overview.get('title')
-
-        slug = [x for x in re.sub('[^a-z\s]', '', slug.lower()).split(' ') if x]
-        temp = slug[0]
-
-        for idx in range(1, len(slug)):
-            temp += f'-{slug[idx]}'
-
-        slug = temp
-
-        article = await Article.objects.acreate(slug=slug)
-
-        article.title = overview.get('title')
-        article.body = json.dumps(content)
-
-        await article.asave()
-
-        return article
-    except Exception as e:
-        await article.acreate(slug='error', title='Error', body=str(e))
     
-    return None
+    overview = json.loads(completion_to_content(await generate_article_overview(content)))
+    content = await generate_article(overview)
+
+    slug: str = overview.get('title')
+
+    slug = [x for x in re.sub('[^a-z\s]', '', slug.lower()).split(' ') if x]
+    temp = slug[0]
+
+    for idx in range(1, len(slug)):
+        temp += f'-{slug[idx]}'
+
+    slug = temp
+
+    try: article = await Article.objects.acreate(slug=slug)
+    except: return
+
+    article.title = overview.get('title')
+    article.body = json.dumps(content)
+
+    await article.asave()
+
+    return article
