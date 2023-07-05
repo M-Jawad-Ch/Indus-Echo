@@ -17,9 +17,9 @@ from .openai_handler import generate
 class ArticleAdmin(admin.ModelAdmin):
     date_hierarchy = "date"
     empty_value_display = "-empty-"
-    readonly_fields = ('date',)
-    list_display = ['title', 'date']
-    ordering = ['-date']
+    readonly_fields = ('date', 'timestamp')
+    list_display = ['title', 'timestamp']
+    ordering = ['-timestamp']
 
 
 async def generate_article(object: Generator):

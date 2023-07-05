@@ -8,6 +8,7 @@ class Article(models.Model):
     title = models.CharField(max_length=100)
     date = models.DateField(auto_now_add=True)
     body = models.TextField()
+    timestamp = models.DateTimeField(auto_now_add=True)
 
     """def save(self, force_insert=False, force_update=False):
         super().save(force_insert, force_update)
