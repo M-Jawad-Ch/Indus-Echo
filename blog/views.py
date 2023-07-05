@@ -9,6 +9,9 @@ from json import loads, dumps
 def index(req: HttpRequest):
     articles = Article.objects.all().order_by('-timestamp')[:12]
 
+    if not articles:
+        return render(req, 'mtc.html')
+
     data = {}
 
     data['top_story'] = {

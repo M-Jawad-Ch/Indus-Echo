@@ -3,14 +3,13 @@
 {% block title %} The Indus Echo | Home {% endblock %}
 
 {% block description %}
-The Indus Echo. We cover many aspects of the history, culture and the nature of the sub-continent.
+The Indus Echo. We cover many aspects of the history, culture and the nature of Pakistan and the Indian sub-continent.
 {% endblock %}
 
 {%block page-style%}
 <style>
     main {
         background-image: linear-gradient(to top, rgba(0, 255, 0, 0.2), white);
-        /* background-color: rgba(0, 255, 0, 0.2); */
     }
 
     #top-story-section {
@@ -119,6 +118,12 @@ The Indus Echo. We cover many aspects of the history, culture and the nature of 
     @media (max-width: 650px) {
         :root {
             --horizontal-margin: 3em;
+        }
+    }
+
+    @media (max-width: 500px) {
+        :root {
+            --horizontal-margin: 0.5em;
         }
     }
 
@@ -265,6 +270,11 @@ The Indus Echo. We cover many aspects of the history, culture and the nature of 
     var animator = async () => {
         var articles = document.getElementsByClassName('preview-available')
         var previews = document.getElementsByClassName('article-preview')
+
+        if (!articles.length) {
+            console.log('Done')
+            return
+        }
 
         for (let i = 0; i < articles.length; i++) {
             var text = JSON.parse(previews[i].innerText.replace(/\n\t/, ''))
