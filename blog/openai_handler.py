@@ -69,7 +69,7 @@ async def current_date(*args, **kwargs):
 
 
 async def prompt_gpt(messages, functions=None):
-    for _ in range(5):
+    for _ in range(10):
         try:
             if functions:
                 completion = await openai.ChatCompletion.acreate(
@@ -203,7 +203,7 @@ async def generate_article_overview(content: str):
     return completion
 
 
-async def generate_section(past: str, current):
+async def generate_section(guidelines: str, past: str, current):
     messages = [
         *[{
             'role': 'assistant',
@@ -211,7 +211,12 @@ async def generate_section(past: str, current):
         } for item in past],
         {
             'role': 'user',
-            'content': f"""No need to add headings and only write the paragraphs for the article. The headings will be given through the overview of the section you will see following this message. Write some content about this section: {current}"""
+            'content': f"""Here are the guidelines for the entire blog post, not this section alone:
+{guidelines}.\nNo need to add headings and only write the paragraphs for the article.
+The headings will be given through the overview of the section you will see following this message.
+Write some content about this section: {current}.
+Again I mention, do not add a heading to the start of the paragraph. Avoid the style of giving headings like Heading:\nSome text about the heading.
+Rather just write the text, for example using the same analogy as before, you will now just write "Some text about the heading" directly."""
         }
     ]
 
@@ -236,10 +241,10 @@ async def generate_section(past: str, current):
     return completion
 
 
-async def generate_article(overview):
+async def generate_article(overview, guidelines):
     content = []
     for section in overview.get('sub-headings'):
-        content.append(completion_to_content(await generate_section(content, str(section))))
+        content.append(completion_to_content(await generate_section(guidelines, content, str(section))))
 
     content = [{
         'sub-heading': overview['sub-headings'][idx].get('sub-heading'),
@@ -249,27 +254,33 @@ async def generate_article(overview):
     return content
 
 
-async def generate(content: str):
-    
-    overview = json.loads(completion_to_content(await generate_article_overview(content)))
-    content = await generate_article(overview)
+async def generate(guidelines: str):
+    try:
+        overview = json.loads(completion_to_content(await generate_article_overview(guidelines)))
 
-    slug: str = overview.get('title')
+        content = await generate_article(overview, guidelines)
 
-    slug = [x for x in re.sub('[^a-z\s]', '', slug.lower()).split(' ') if x]
-    temp = slug[0]
+        slug: str = overview.get('title')
 
-    for idx in range(1, len(slug)):
-        temp += f'-{slug[idx]}'
+        slug = [x for x in re.sub(
+            '[^a-z\s]', '', slug.lower()).split(' ') if x]
+        temp = slug[0]
 
-    slug = temp
+        for idx in range(1, len(slug)):
+            temp += f'-{slug[idx]}'
 
-    try: article = await Article.objects.acreate(slug=slug)
-    except: return
+        slug = temp
 
-    article.title = overview.get('title')
-    article.body = json.dumps(content)
+        try:
+            article = await Article.objects.acreate(slug=slug)
+        except:
+            return
 
-    await article.asave()
+        article.title = overview.get('title')
+        article.body = json.dumps(content)
 
-    return article
+        await article.asave()
+
+        return article
+    except:
+        return None
