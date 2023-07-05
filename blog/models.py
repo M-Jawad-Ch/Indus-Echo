@@ -36,5 +36,7 @@ class Generator(models.Model):
     used = models.BooleanField(default=False)
     running = models.BooleanField(default=False)
 
+    article_slug = models.CharField(max_length=100, default='')
+
     def __str__(self):
         return self.content[:100]

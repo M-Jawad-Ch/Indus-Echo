@@ -26,11 +26,15 @@ async def generate_article(object: Generator):
     object.running = True
     await object.asave()
 
-    await generate(object.content)
+    article = await generate(object.content)
 
     object.running = False
     object.used = True
     await object.asave()
+
+    object.article_slug = article.slug if article else 'invalid'
+    await object.asave()
+
 
 
 def thread_function(object: Generator):
@@ -45,7 +49,7 @@ def thread_function(object: Generator):
 class GeneratorAdmin(DjangoObjectActions, admin.ModelAdmin):
     date_hierarchy = "date"
     empty_value_display = "-empty-"
-    readonly_fields = ('date', 'used', 'running')
+    readonly_fields = ('date', 'used', 'running', 'article_slug')
     list_display = ['content', 'running', 'used']
 
     @action(label='Generate', description='Prompt GPT to generate an article.')
