@@ -243,10 +243,7 @@ async def generate_article(overview):
 
     content = [{
         'sub-heading': overview['sub-headings'][idx].get('sub-heading'),
-        'text':[item for item in
-                text.replace(
-                    overview['sub-headings'][idx].get('sub-heading'), "")
-                .replace('\n\n', '\n').split('\n') if item and len(item) > 1]
+        'text':[item for item in text.replace('\n\n', '\n').split('\n') if item and len(item) > 1]
     } for idx, text in enumerate(content)]
 
     return content
