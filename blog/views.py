@@ -57,5 +57,22 @@ async def get_post_via_category(req: HttpRequest, category: str, post: str):
     })
 
 
-async def get_category(req: HttpRequest, slug: str):
-    return render(req, 'mtc.html')
+def get_category(req: HttpRequest, slug: str):
+    articles = Article.objects.filter(category=slug).all()
+    category = Category.objects.get(pk=slug)
+    return render(req, 'category.html', {
+        'category': {
+            'slug': category.slug,
+            'title': category.name
+        },
+        'articles': [{
+            'title': article.title,
+            'date': article.date,
+            'slug': article.slug
+        } for article in articles]})
+
+
+def return_404(req: HttpRequest, *args, **kwargs):
+    resp = HttpResponse()
+    resp.status_code = 404
+    return resp

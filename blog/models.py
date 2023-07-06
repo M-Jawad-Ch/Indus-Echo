@@ -4,6 +4,10 @@ from django.contrib.sitemaps import ping_google
 from django.utils import timezone
 
 from datetime import datetime
+
+from mysite.settings import DEBUG
+
+
 # Create your models here.
 
 
@@ -17,6 +21,9 @@ class Category(models.Model):
 
     def __str__(self) -> str:
         return str(self.name)
+
+    def get_absolute_url(self):
+        return f'/{self.slug}'
 
     class Meta:
         verbose_name = 'Category'
@@ -38,11 +45,12 @@ class Article(models.Model):
         self.modified = datetime.now(tz=timezone.utc)
         super(Article, self).save(*args, **kwargs)
 
-        try:
-            ping_google('/sitemap.xml')
-        except Exception as e:
-            print(e)
-            pass
+        if not DEBUG:
+            try:
+                ping_google('/sitemap.xml')
+            except Exception as e:
+                print(e)
+                pass
 
     def __str__(self):
         return self.title
