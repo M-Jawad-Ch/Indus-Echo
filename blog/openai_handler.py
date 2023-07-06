@@ -8,6 +8,8 @@ import environ
 import os
 
 from datetime import datetime
+from django.utils.text import slugify
+
 
 from .models import Article
 
@@ -260,16 +262,7 @@ async def generate(guidelines: str):
 
         content = await generate_article(overview, guidelines)
 
-        slug: str = overview.get('title')
-
-        slug = [x for x in re.sub(
-            '[^a-z\s]', '', slug.lower()).split(' ') if x]
-        temp = slug[0]
-
-        for idx in range(1, len(slug)):
-            temp += f'-{slug[idx]}'
-
-        slug = temp
+        slug: str = slugify(overview.get('title'))
 
         try:
             article = await Article.objects.acreate(slug=slug)
@@ -283,4 +276,4 @@ async def generate(guidelines: str):
 
         return article
     except:
-        return None
+        return

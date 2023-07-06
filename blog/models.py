@@ -1,5 +1,5 @@
 from django.db import models
-
+from django.contrib.sitemaps import ping_google
 # Create your models here.
 
 
@@ -9,11 +9,16 @@ class Article(models.Model):
     date = models.DateField(auto_now_add=True)
     body = models.TextField()
     timestamp = models.DateTimeField(auto_now_add=True)
+    modified = models.DateTimeField(auto_now_add=True)
 
-    """def save(self, force_insert=False, force_update=False):
-        super().save(force_insert, force_update)
+    def save(self, *args, **kwargs):
+        super(Article, self).save(*args, **kwargs)
 
-        # PING GOOGLE"""
+        try:
+            ping_google('/sitemap.xml')
+        except Exception:
+            print('could not ping google')
+            pass
 
     def __str__(self):
         return self.title
