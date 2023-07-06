@@ -24,4 +24,4 @@ class ArticleSiteMap(Sitemap):
         return Article.objects.all()
 
     def lastmod(self, obj: Article):
-        return obj.modified
+        return obj.modified.date()

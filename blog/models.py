@@ -1,5 +1,7 @@
 from django.db import models
 from django.contrib.sitemaps import ping_google
+
+from datetime import datetime
 # Create your models here.
 
 
@@ -12,6 +14,7 @@ class Article(models.Model):
     modified = models.DateTimeField(auto_now_add=True)
 
     def save(self, *args, **kwargs):
+        self.modified = datetime.now()
         super(Article, self).save(*args, **kwargs)
 
         try:
