@@ -41,13 +41,14 @@ class Article(models.Model):
         try:
             ping_google('/sitemap.xml')
         except Exception as e:
+            print(e)
             pass
 
     def __str__(self):
         return self.title
 
     def get_absolute_url(self):
-        return f'/post/{self.slug}'
+        return f'/post/{self.slug}' if not self.category else f'/{self.category.slug}/{self.slug}'
 
 
 class Message(models.Model):
