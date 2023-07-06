@@ -216,9 +216,9 @@ async def generate_section(guidelines: str, past: str, current):
             'content': f"""Here are the guidelines for the entire blog post, not this section alone:
 {guidelines}.\nNo need to add headings and only write the paragraphs for the article.
 The headings will be given through the overview of the section you will see following this message.
-Write some content about this section: {current}.
-Again I mention, do not add a heading to the start of the paragraph. Avoid the style of giving headings like Heading:\nSome text about the heading.
-Rather just write the text, for example using the same analogy as before, you will now just write "Some text about the heading" directly."""
+Write some content about this section: {current}. Feel free to use HTML to make the text appropriate and better lookhin.
+Don't use h1 ahd h2 tags as they are for higher level headings, you can use h3 and below headings.
+"""
         }
     ]
 
