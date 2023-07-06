@@ -109,55 +109,6 @@ The Indus Echo. We cover many aspects of the history, culture and the nature of 
         --horizontal-margin: 7em;
     }
 
-    @media (max-width: 1100px) {
-        #board {
-            width: 100%;
-        }
-    }
-
-    @media (max-width: 650px) {
-        :root {
-            --horizontal-margin: 3em;
-        }
-    }
-
-    @media (max-width: 500px) {
-        :root {
-            --horizontal-margin: 0.5em;
-        }
-    }
-
-    @media (max-width: 950px) {
-        #top-story-section {
-            flex-direction: column;
-        }
-
-        #main-story {
-            margin: 1em var(--horizontal-margin);
-        }
-
-        #main-story-inner {
-            height: 17em;
-        }
-
-        #side-stories {
-            margin: 1em var(--horizontal-margin);
-        }
-
-        #content {
-            flex-direction: column;
-            padding: 0;
-        }
-
-        .content-column {
-            margin: 1em var(--horizontal-margin);
-        }
-
-        #special-column {
-            display: none;
-        }
-    }
-
     .border-none {
         border: none;
     }
@@ -261,8 +212,152 @@ The Indus Echo. We cover many aspects of the history, culture and the nature of 
             opacity: 0;
         }
     }
+
+    #categories {
+        width: 100%;
+        border-bottom: 1px solid var(--border-color);
+        display: flex;
+        justify-content: center;
+    }
+
+    .category {
+        padding: 0.25em 1em;
+        font-weight: bold;
+        font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    }
 </style>
 {%endblock%}
+
+{% block media-queries %}
+<style>
+    @media (max-width: 1100px) {
+        #board {
+            width: 100%;
+        }
+    }
+
+    @media (max-width: 650px) {
+        :root {
+            --horizontal-margin: 3em;
+        }
+    }
+
+    @media (max-width: 500px) {
+        :root {
+            --horizontal-margin: 0.5em;
+        }
+    }
+
+    @media (max-width: 950px) {
+        #top-story-section {
+            flex-direction: column;
+        }
+
+        #main-story {
+            margin: 1em var(--horizontal-margin);
+        }
+
+        #main-story-inner {
+            height: 17em;
+        }
+
+        #side-stories {
+            margin: 1em var(--horizontal-margin);
+        }
+
+        #content {
+            flex-direction: column;
+            padding: 0;
+        }
+
+        .content-column {
+            margin: 1em var(--horizontal-margin);
+        }
+
+        #special-column {
+            display: none;
+        }
+    }
+</style>
+{% endblock %}
+
+
+
+{% block main %}
+<div id="categories">
+    {% for category in categories %}
+    <div class="category">
+        <a href="/{{ category.slug }}">{{ category.name }}</a>
+    </div>
+    {% endfor %}
+</div>
+<section id="top-story-section">
+    <div id="main-story">
+        <div id="crescent-parent">
+            <svg id='star' fill="#ffffff" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg">
+                <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                <g id="SVGRepo_iconCarrier">
+                    <title>star</title>
+                    <path
+                        d="M3.488 13.184l6.272 6.112-1.472 8.608 7.712-4.064 7.712 4.064-1.472-8.608 6.272-6.112-8.64-1.248-3.872-7.808-3.872 7.808z">
+                    </path>
+                </g>
+            </svg>
+            <svg id="crescent" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg"
+                xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img"
+                class="iconify iconify--emojione-monotone" preserveAspectRatio="xMidYMid meet" fill="#ffffff"
+                transform="matrix(-1, 0, 0, 1, 0, 0)">
+                <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                <g id="SVGRepo_iconCarrier">
+                    <path
+                        d="M43.139 2a29.885 29.885 0 0 1 5.121 16.756c0 16.701-13.686 30.24-30.57 30.24a30.656 30.656 0 0 1-15.689-4.285C7.209 54.963 17.93 62 30.318 62C47.816 62 62 47.969 62 30.66C62 17.867 54.246 6.871 43.139 2z"
+                        fill="#ffffff"></path>
+                </g>
+            </svg>
+        </div>
+        <div id="main-story-inner">
+            <div>
+                <a href="/post/{{ top_story.slug }}">
+                    <h1> {{ top_story.title }} </h1>
+                    <p id="main-desc">
+                        {{ top_story.desc }}
+                    </p>
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+<section id="content">
+    {% load slice %}
+    <div class="content-column">
+        {% for story in articles|slice:"0:5" %}
+        <div class="article {% if forloop.last %} {{'border-none'}} {% endif %} preview-available">
+            <a href="/post/{{ story.slug }}">{{ story.title }} <br><span class="date">~ {{ story.date }}</span></a>
+        </div>
+        {% endfor %}
+    </div>
+    <div class="content-column">
+        {% for story in articles|slice:"5:10" %}
+        <div class="article {% if forloop.last %} {{'border-none'}} {% endif %} preview-available">
+            <a href="/post/{{ story.slug }}">{{ story.title }} <br><span class="date">~ {{ story.date }}</span></a>
+        </div>
+        {% endfor %}
+    </div>
+    <div class="content-column special-column">
+        {% for story in articles %}
+        <a href="/post/{{ story.slug }}">
+            <div class="article-preview hide-article-preview">
+                [{% for preview in story.previews %}{{ preview }}
+                {% if not forloop.last %}
+                {{ ',' }} {% endif %} {% endfor %}]
+            </div>
+        </a>
+        {% endfor %}
+    </div>
+</section>
+{% endblock %}
 
 {% block script %}
 <script type="module">
@@ -363,73 +458,4 @@ The Indus Echo. We cover many aspects of the history, culture and the nature of 
     await animator()
 
 </script>
-{% endblock %}
-
-{% block main %}
-<section id="top-story-section">
-    <div id="main-story">
-        <div id="crescent-parent">
-            <svg id='star' fill="#ffffff" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg">
-                <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-                <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
-                <g id="SVGRepo_iconCarrier">
-                    <title>star</title>
-                    <path
-                        d="M3.488 13.184l6.272 6.112-1.472 8.608 7.712-4.064 7.712 4.064-1.472-8.608 6.272-6.112-8.64-1.248-3.872-7.808-3.872 7.808z">
-                    </path>
-                </g>
-            </svg>
-            <svg id="crescent" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg"
-                xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img"
-                class="iconify iconify--emojione-monotone" preserveAspectRatio="xMidYMid meet" fill="#ffffff"
-                transform="matrix(-1, 0, 0, 1, 0, 0)">
-                <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-                <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
-                <g id="SVGRepo_iconCarrier">
-                    <path
-                        d="M43.139 2a29.885 29.885 0 0 1 5.121 16.756c0 16.701-13.686 30.24-30.57 30.24a30.656 30.656 0 0 1-15.689-4.285C7.209 54.963 17.93 62 30.318 62C47.816 62 62 47.969 62 30.66C62 17.867 54.246 6.871 43.139 2z"
-                        fill="#ffffff"></path>
-                </g>
-            </svg>
-        </div>
-        <div id="main-story-inner">
-            <div>
-                <a href="/post/{{ top_story.slug }}">
-                    <h1> {{ top_story.title }} </h1>
-                    <p id="main-desc">
-                        {{ top_story.desc }}
-                    </p>
-                </a>
-            </div>
-        </div>
-    </div>
-</section>
-<section id="content">
-    {% load slice %}
-    <div class="content-column">
-        {% for story in articles|slice:"0:5" %}
-        <div class="article {% if forloop.last %} {{'border-none'}} {% endif %} preview-available">
-            <a href="/post/{{ story.slug }}">{{ story.title }} <br><span class="date">~ {{ story.date }}</span></a>
-        </div>
-        {% endfor %}
-    </div>
-    <div class="content-column">
-        {% for story in articles|slice:"5:10" %}
-        <div class="article {% if forloop.last %} {{'border-none'}} {% endif %} preview-available">
-            <a href="/post/{{ story.slug }}">{{ story.title }} <br><span class="date">~ {{ story.date }}</span></a>
-        </div>
-        {% endfor %}
-    </div>
-    <div class="content-column special-column">
-        {% for story in articles %}
-        <a href="/post/{{ story.slug }}">
-            <div class="article-preview hide-article-preview">
-                [{% for preview in story.previews %}{{ preview }}
-                {% if not forloop.last %}
-                {{ ',' }} {% endif %} {% endfor %}]
-            </div>
-        </a>
-        {% endfor %}
-    </div>
-</section>
 {% endblock %}

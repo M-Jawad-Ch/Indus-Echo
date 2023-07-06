@@ -29,9 +29,9 @@ environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 SECRET_KEY = env.get_value('DJANGO_SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = env.get_value('DEBUG')
 
-ALLOWED_HOSTS = ['blog.indusecho.site']
+ALLOWED_HOSTS = ['blog.indusecho.site'] + ['*'] if DEBUG else []
 
 
 # Application definition

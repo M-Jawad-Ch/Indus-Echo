@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse, HttpRequest
-from .models import Article, Message
+from .models import Article, Category
 
 from datetime import datetime
 from json import loads, dumps
@@ -8,11 +8,15 @@ from json import loads, dumps
 
 def index(req: HttpRequest):
     articles = Article.objects.all().order_by('-timestamp')[:12]
+    categories = Category.objects.all()
 
     if not articles:
         return render(req, 'mtc.html')
 
     data = {}
+
+    data['categories'] = [{'name': category.name,
+                           'slug': category.slug} for category in categories]
 
     data['top_story'] = {
         'title': articles[0].title if articles else '',
@@ -29,12 +33,6 @@ def index(req: HttpRequest):
         } for article in articles[1:12]
     ]
 
-    message = Message.objects.first()
-    data['message'] = message.text if message else ''
-    data['date'] = message.date if message else datetime.now().date().today()
-
-    del message
-
     return render(req, 'index.html', data)
 
 
@@ -47,3 +45,7 @@ async def get_post(req: HttpRequest, slug: str):
         'content': loads(data.body),
         'date': data.date
     })
+
+
+async def get_category(req: HttpRequest, slug: str):
+    return render(req, 'mtc.html')

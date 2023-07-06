@@ -45,7 +45,6 @@ def thread_function(object: Generator):
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
-    # admin.ModelAdmi
     pass
 
 
