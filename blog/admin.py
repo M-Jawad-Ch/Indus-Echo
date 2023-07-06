@@ -6,7 +6,7 @@ import asyncio
 
 from django_object_actions import DjangoObjectActions, action
 
-from .models import Article, Message, Generator
+from .models import Article, Message, Generator, Category
 from .openai_handler import generate
 
 
@@ -17,7 +17,7 @@ from .openai_handler import generate
 class ArticleAdmin(admin.ModelAdmin):
     date_hierarchy = "date"
     empty_value_display = "-empty-"
-    readonly_fields = ('date', 'timestamp', 'modified')
+    readonly_fields = ('date', 'timestamp', 'modified', 'slug')
     list_display = ['title', 'timestamp']
     ordering = ['-timestamp']
 
@@ -29,10 +29,9 @@ async def generate_article(object: Generator):
     article = await generate(object.content)
 
     object.running = False
-    object.used = True
+    object.used = True if article else False
     await object.asave()
 
-    # object.article_slug = article.slug if article else 'invalid'
     await object.asave()
 
 
@@ -44,12 +43,18 @@ def thread_function(object: Generator):
     loop.close()
 
 
+@admin.register(Category)
+class CategoryAdmin(admin.ModelAdmin):
+    # admin.ModelAdmi
+    pass
+
+
 @admin.register(Generator)
 class GeneratorAdmin(DjangoObjectActions, admin.ModelAdmin):
     date_hierarchy = "date"
     empty_value_display = "-empty-"
-    # readonly_fields = ('date', 'used', 'running', 'article_slug')
-    list_display = ['content', 'running', 'used']
+    readonly_fields = ('date', 'used', 'running')
+    list_display = ['content', 'used', 'running']
 
     @action(label='Generate', description='Prompt GPT to generate an article.')
     def generate(self, request: HttpRequest, obj: Generator):

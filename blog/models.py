@@ -11,6 +11,10 @@ class Category(models.Model):
     def __str__(self) -> str:
         return str(self.name)
 
+    class Meta:
+        verbose_name = 'Category'
+        verbose_name_plural = 'Categories'
+
 
 class Article(models.Model):
     slug = models.SlugField(unique=True, max_length=100, primary_key=True)
