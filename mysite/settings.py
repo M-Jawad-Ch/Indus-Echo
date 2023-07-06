@@ -34,6 +34,9 @@ DEBUG = env.get_value('DEBUG')
 ALLOWED_HOSTS = ['blog.indusecho.site'] if not DEBUG else ['*']
 
 
+SITE_ID = 1
+
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -44,6 +47,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.sitemaps',
+    'django.contrib.sites',
     'blog',
     'django_object_actions'
 ]

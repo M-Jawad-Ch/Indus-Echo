@@ -47,5 +47,15 @@ async def get_post(req: HttpRequest, slug: str):
     })
 
 
+async def get_post_via_category(req: HttpRequest, category: str, post: str):
+    data = await Article.objects.aget(slug=post)
+
+    return render(req, 'post.html', {
+        'title': data.title,
+        'content': loads(data.body),
+        'date': data.date
+    })
+
+
 async def get_category(req: HttpRequest, slug: str):
     return render(req, 'mtc.html')

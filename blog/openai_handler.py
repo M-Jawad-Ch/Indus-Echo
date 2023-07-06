@@ -3,7 +3,6 @@ import json
 import aiolimiter
 import aiohttp
 import asyncio
-import re
 import environ
 import os
 

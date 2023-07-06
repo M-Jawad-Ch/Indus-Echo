@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils.text import slugify
 from django.contrib.sitemaps import ping_google
+from django.utils import timezone
 
 from datetime import datetime
 # Create your models here.
@@ -34,13 +35,12 @@ class Article(models.Model):
         Category, on_delete=models.SET_NULL, null=True)
 
     def save(self, *args, **kwargs):
-        self.modified = datetime.now()
+        self.modified = datetime.now(tz=timezone.utc)
         super(Article, self).save(*args, **kwargs)
 
         try:
             ping_google('/sitemap.xml')
-        except Exception:
-            print('could not ping google')
+        except Exception as e:
             pass
 
     def __str__(self):
