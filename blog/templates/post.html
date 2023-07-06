@@ -100,3 +100,27 @@
 </div>
 
 {% endblock %}
+
+{% block script %}
+<script>
+    var container = document.getElementById('inner-container')
+    var paras = container.querySelectorAll('p')
+
+    for (let para of paras) {
+        var s = para.innerText
+
+        var matches = s.matchAll(/"[^"]+"/g)
+        var values = []
+
+        for (let n = matches.next(); !n.done; n = matches.next()) {
+            values.push(n.value[0])
+        }
+
+        for (let val of values.reverse()) {
+            s = s.replace(val, `<b>${val}</b>`)
+        }
+
+        para.innerHTML = s
+    }
+</script>
+{% endblock %}
