@@ -18,7 +18,7 @@ class ArticleAdmin(admin.ModelAdmin):
     date_hierarchy = "date"
     empty_value_display = "-empty-"
     readonly_fields = ('date', 'timestamp', 'modified', 'slug')
-    list_display = ['title', 'timestamp']
+    list_display = ['title', 'category','timestamp']
     ordering = ['-timestamp']
 
 
