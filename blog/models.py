@@ -5,6 +5,13 @@ from datetime import datetime
 # Create your models here.
 
 
+class Category(models.Model):
+    name = models.CharField(max_length=100, primary_key=True)
+
+    def __str__(self) -> str:
+        return str(self.name)
+
+
 class Article(models.Model):
     slug = models.SlugField(unique=True, max_length=100, primary_key=True)
     title = models.CharField(max_length=100)
@@ -12,6 +19,9 @@ class Article(models.Model):
     body = models.TextField()
     timestamp = models.DateTimeField(auto_now_add=True)
     modified = models.DateTimeField(auto_now_add=True)
+
+    category = models.ForeignKey(
+        Category, on_delete=models.SET_NULL, null=True)
 
     def save(self, *args, **kwargs):
         self.modified = datetime.now()
@@ -44,8 +54,6 @@ class Generator(models.Model):
     date = models.DateTimeField(auto_now_add=True)
     used = models.BooleanField(default=False)
     running = models.BooleanField(default=False)
-
-    article_slug = models.CharField(max_length=100, default='')
 
     def __str__(self):
         return self.content[:100]
