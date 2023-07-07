@@ -58,7 +58,8 @@ async def get_post_via_category(req: HttpRequest, category: str, post: str):
 
 
 def get_category(req: HttpRequest, slug: str):
-    articles = Article.objects.filter(category=slug).all()
+    articles = Article.objects.filter(
+        category=slug).all().order_by('-timestamp')
     category = Category.objects.get(pk=slug)
     return render(req, 'category.html', {
         'category': {
