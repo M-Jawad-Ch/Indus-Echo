@@ -211,11 +211,16 @@ async def generate_section(guidelines: str, past: str, current):
         } for item in past],
         {
             'role': 'user',
-            'content': f"""Here are the guidelines for the entire blog post, not this section alone:
-{guidelines}.
-Write some content about this section: {current}. Feel free to use HTML to make the text appropriate and better lookhin.
-Don't use h1 tag as it is for high level headings, you can use h2 and below tags for headings. Prefer to start each section with a heading.
-A h2 heading would be great for a section. After that use HTML as necessary.
+            'content': f"""
+Here are the guidelines for the entire blog post, not this section alone:\n\n{guidelines}.
+Write some content about this section: {current}.
+Feel free to use HTML to make the text appropriate and better lookhin.
+Don't use h1 tag as it is for high level headings, you can use h2 and below tags for headings.
+Prefer to start each section with a heading.
+A h2 heading would be great for a section. After that use HTML as necessary. Make sure to make it look great with HTML.
+Try not to repeat yourself, make the sections look beautiful and engaging.
+Bear in mind what has already been written. If this is the first section then write content that will introduce the reader to the topic.
+If the introduction has been given move on, donot repeat what has been mentioned again and again.
 """
         }
     ]
