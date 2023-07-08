@@ -212,10 +212,10 @@ async def generate_section(guidelines: str, past: str, current):
         {
             'role': 'user',
             'content': f"""Here are the guidelines for the entire blog post, not this section alone:
-{guidelines}.\nNo need to add headings and only write the paragraphs for the article.
-The headings will be given through the overview of the section you will see following this message.
+{guidelines}.
 Write some content about this section: {current}. Feel free to use HTML to make the text appropriate and better lookhin.
-Don't use h1 tag as it is for high level headings, you can use h2 and below tags for headings.
+Don't use h1 tag as it is for high level headings, you can use h2 and below tags for headings. Prefer to start each section with a heading.
+A h2 heading would be great for a section. After that use HTML as necessary.
 """
         }
     ]
