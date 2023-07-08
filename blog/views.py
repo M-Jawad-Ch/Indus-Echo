@@ -20,7 +20,7 @@ def index(req: HttpRequest):
 
     data['top_story'] = {
         'title': articles[0].title if articles else '',
-        'desc': loads(articles[0].body)[0]['text'][0],
+        'desc': loads(articles[0].body)[0],
         'slug': articles[0].slug
     }
 
@@ -29,7 +29,7 @@ def index(req: HttpRequest):
             'title': article.title,
             'date': article.date,
             'slug': article.slug,
-            'previews': [dumps(text) for text in loads(article.body)[0]['text'][:2]]
+            'preview': loads(article.body)[0]
         } for article in articles[1:12]
     ]
 
@@ -42,7 +42,7 @@ async def get_post(req: HttpRequest, slug: str):
 
     return render(req, 'post.html', {
         'title': data.title,
-        'content': loads(data.body),
+        'sections': loads(data.body),
         'date': data.date
     })
 
@@ -52,7 +52,7 @@ async def get_post_via_category(req: HttpRequest, category: str, post: str):
 
     return render(req, 'post.html', {
         'title': data.title,
-        'content': loads(data.body),
+        'sections': loads(data.body),
         'date': data.date
     })
 

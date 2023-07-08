@@ -9,7 +9,6 @@ import os
 from datetime import datetime
 from django.utils.text import slugify
 
-
 from .models import Article
 
 
@@ -216,7 +215,7 @@ async def generate_section(guidelines: str, past: str, current):
 {guidelines}.\nNo need to add headings and only write the paragraphs for the article.
 The headings will be given through the overview of the section you will see following this message.
 Write some content about this section: {current}. Feel free to use HTML to make the text appropriate and better lookhin.
-Don't use h1 ahd h2 tags as they are for higher level headings, you can use h3 and below headings.
+Don't use h1 tag as it is for high level headings, you can use h2 and below tags for headings.
 """
         }
     ]
@@ -246,11 +245,6 @@ async def generate_article(overview, guidelines):
     content = []
     for section in overview.get('sub-headings'):
         content.append(completion_to_content(await generate_section(guidelines, content, str(section))))
-
-    content = [{
-        'sub-heading': overview['sub-headings'][idx].get('sub-heading'),
-        'text':[item for item in text.replace('\n\n', '\n').split('\n') if item and len(item) > 1]
-    } for idx, text in enumerate(content)]
 
     return content
 

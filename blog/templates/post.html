@@ -90,12 +90,13 @@
         <h1 id="title-text"> {{ title }} </h1>
         <span id="date">{{ date }}</span>
         <hr>
-        {% for section in content %}
-        <h2> {{ section|lookup:'sub-heading' }} </h2>
-        {% for paragraph in section.text %}
-        <p>{{ paragraph }}</p>
+        {% autoescape off %}
+        {% for section in sections %}
+        <div class="sections">
+            {{ section }}
+        </div>
         {% endfor %}
-        {% endfor %}
+        {% endautoescape %}
     </div>
 </div>
 
@@ -103,11 +104,5 @@
 
 {% block script %}
 <script>
-    var container = document.getElementById('inner-container')
-    var paras = container.querySelectorAll('p')
-
-    for (let para of paras) {
-        para.innerHTML = para.innerText
-    }
 </script>
 {% endblock %}

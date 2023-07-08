@@ -325,9 +325,13 @@ The Indus Echo. We cover many aspects of the history, culture and the nature of 
             <div>
                 <a href="/post/{{ top_story.slug }}">
                     <h1> {{ top_story.title }} </h1>
-                    <p id="main-desc">
-                        {{ top_story.desc }}
-                    </p>
+                    {% autoescape off %}
+                    {{ top_story.desc }}
+                    {% endautoescape %}
+                    <script>
+                        var x = document.getElementById('main-story-inner')
+                        x.querySelector('div').querySelector('a').innerHTML = `<h1>${x.querySelector('h1').innerText}</h1><p>${x.querySelector('p').innerText}</p>`
+                    </script>
                 </a>
             </div>
         </div>
@@ -353,12 +357,19 @@ The Indus Echo. We cover many aspects of the history, culture and the nature of 
         {% for story in articles %}
         <a href="/post/{{ story.slug }}">
             <div class="article-preview hide-article-preview">
-                [{% for preview in story.previews %}{{ preview }}
-                {% if not forloop.last %}
-                {{ ',' }} {% endif %} {% endfor %}]
+                {% autoescape off %}
+                {{ story.preview }}
+                {% endautoescape %}
             </div>
         </a>
         {% endfor %}
+        <script>
+            x = document.getElementsByClassName('article-preview')
+            for (const preview of x) {
+                let para = preview.querySelector('p')
+                preview.innerHTML = para.innerText
+            }
+        </script>
     </div>
 </section>
 {% endblock %}
@@ -376,15 +387,13 @@ The Indus Echo. We cover many aspects of the history, culture and the nature of 
         }
 
         for (let i = 0; i < articles.length; i++) {
-            var text = JSON.parse(previews[i].innerText.replace(/\n\t/, ''))
+            var text = previews[i].innerText
 
             let res = ''
-            for (const p of text) {
-                res += '<p>'
-                for (const char of p) {
-                    res += '<span class="animated-words">' + char + '</span>'
-                } res += '</p>'
-            }
+            res += '<p>'
+            for (const char of text) {
+                res += '<span class="animated-words">' + char + '</span>'
+            } res += '</p>'
 
             var prevtext = previews[i].innerText
             text = res
