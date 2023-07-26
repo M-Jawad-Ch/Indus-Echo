@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from django.utils.text import slugify
 from django.http import HttpResponse, HttpRequest
 from .models import Article, Category
 
@@ -38,7 +39,7 @@ def index(req: HttpRequest):
 
 async def get_post(req: HttpRequest, slug: str):
 
-    data = await Article.objects.aget(slug=slug)
+    data = await Article.objects.aget(slug=slugify(slug))
 
     return render(req, 'post.html', {
         'title': data.title,
@@ -48,7 +49,7 @@ async def get_post(req: HttpRequest, slug: str):
 
 
 async def get_post_via_category(req: HttpRequest, category: str, post: str):
-    data = await Article.objects.aget(slug=post)
+    data = await Article.objects.aget(slug=slugify(post))
 
     return render(req, 'post.html', {
         'title': data.title,
@@ -59,8 +60,8 @@ async def get_post_via_category(req: HttpRequest, category: str, post: str):
 
 def get_category(req: HttpRequest, slug: str):
     articles = Article.objects.filter(
-        category=slug).all().order_by('-timestamp')
-    category = Category.objects.get(pk=slug)
+        category=slugify(slug)).all().order_by('-timestamp')
+    category = Category.objects.get(pk=slugify(slug))
     return render(req, 'category.html', {
         'category': {
             'slug': category.slug,
